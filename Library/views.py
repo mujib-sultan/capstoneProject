@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from .models import User, Book, Transaction
 from .Serializers import UserSerializer, BookSerializer, TransactionSerializer
 from .forms import UserCreationForms, BookForm
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm , UserChangeForm
 from django.contrib.auth import login
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -14,7 +13,6 @@ from rest_framework.views import APIView
 from django.core.paginator import Paginator
 from django.contrib import messages
 
-# Create your views here.
 
 #Homepage view
 def homepage(request):
@@ -22,11 +20,8 @@ def homepage(request):
     if request.user.is_authenticated:
         return redirect('main_hall')
 
-    # Initialize the authentication form
-    form = AuthenticationForm()
-
-    # Render the homepage template
-    return render(request, 'homepage.html', {'form': form})
+    form = AuthenticationForm()       # Initialize the authentication form
+    return render(request, 'homepage.html', {'form': form})      # Render the homepage template
 
 def register(request):
     if request.user.is_authenticated:
@@ -162,13 +157,8 @@ def manage_books(request):
             book.delete()
             messages.success(request, "Book deleted successfully!")
             return redirect('manage_books')
-        
-    # Pagination
-    paginator = Paginator(books, 10)  # Show 10 books per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
 
-    return render(request, 'manage_books.html', {'page_obj': page_obj, 'form': BookForm()})
+    return render(request, 'manage_books.html', {'page_object': 'page_object', 'form': BookForm()})
 
 # Only superusers can manage users
 @user_passes_test(lambda u: u.is_superuser)
