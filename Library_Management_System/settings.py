@@ -26,9 +26,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
-if ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ALLOWED_HOSTS.split(' ')
+allowed_hosts = os.environ.get('ALLOWED_HOSTS', '')
+if isinstance(allowed_hosts, str):
+    ALLOWED_HOSTS = allowed_hosts.split(' ')
+elif isinstance(allowed_hosts, list):
+    ALLOWED_HOSTS = allowed_hosts
 else:
     ALLOWED_HOSTS = []
 
@@ -89,8 +91,8 @@ DATABASES = {
     }
 }
 database_url = os.environ.get('DATABASE_URL')
-DATABASES['default'] = dj_database_url.parse(database_url)
-
+if database_url:
+    DATABASES['default'] = dj_database_url.parse(database_url)
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
